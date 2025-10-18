@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://pink_power_up"]
+
+[ext_resource type="Script" path="res://scripts/power_up.gd" id="1"]
+
+[sub_resource type="StandardMaterial3D" id="2"]
+albedo_color = Color(1, 0.407843, 0.705882, 1)
+emission_enabled = true
+emission = Color(1, 0.45098, 0.72549, 1)
+metallic = 0.05
+roughness = 0.35
+
+[sub_resource type="SphereMesh" id="3"]
+material = SubResource(2)
+radius = 0.4
+
+[sub_resource type="SphereShape3D" id="4"]
+radius = 0.45
+
+[node name="PinkPowerUp" type="Area3D"]
+script = ExtResource("1")
+power_type = "weaken_enemies"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource(4)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource(3)

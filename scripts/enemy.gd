@@ -9,6 +9,10 @@ var health: float = 20.0
 var target: Node3D
 
 
+func _ready() -> void:
+	add_to_group("enemies")
+
+
 func setup(initial_health: float, target_node: Node3D) -> void:
 	health = initial_health
 	target = target_node
@@ -43,3 +47,7 @@ func take_damage(amount: float) -> void:
 	if health <= 0.0:
 		died.emit(self)
 		queue_free()
+
+
+func force_health(value: float) -> void:
+	health = min(health, value)
