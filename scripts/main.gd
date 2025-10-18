@@ -14,6 +14,7 @@ extends Node3D
 
 @onready var player: CharacterBody3D = %Player
 @onready var spawn_timer: Timer = %EnemySpawnTimer
+@onready var health_display := get_node_or_null("%HealthDisplay")
 
 var _enemies_spawned := 0
 var _enemy_health_override_timer := 0.0
@@ -21,8 +22,13 @@ var _enemy_health_override_timer := 0.0
 
 func _ready() -> void:
 	randomize()
-	if bullet_scene:
-		player.bullet_scene = bullet_scene
+	if is_instance_valid(player):
+		if bullet_scene:
+			player.bullet_scene = bullet_scene
+		player.health_changed.connect(_on_player_health_changed)
+		player.died.connect(_on_player_died)
+		if health_display and health_display.has_method("set_health"):
+			health_display.set_health(player.current_health(), player.max_health)
 	spawn_timer.wait_time = spawn_interval
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
 	spawn_timer.start()
@@ -97,3 +103,13 @@ func apply_enemy_health_override(duration: float) -> void:
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		if enemy.has_method("force_health"):
 			enemy.force_health(1.0)
+
+
+func _on_player_health_changed(current: float, max_value: float) -> void:
+	if not health_display or not health_display.has_method("set_health"):
+		return
+	health_display.set_health(current, max_value)
+
+
+func _on_player_died(_player: Node) -> void:
+	spawn_timer.stop()
