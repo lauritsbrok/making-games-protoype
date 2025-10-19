@@ -1,17 +1,20 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=14 format=3 uid="uid://2nbamlkn3svh"]
 
-[ext_resource path="res://scripts/main.gd" type="Script" id="1"]
-[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id="2"]
-[ext_resource path="res://scenes/Enemy.tscn" type="PackedScene" id="3"]
-[ext_resource path="res://scenes/Bullet.tscn" type="PackedScene" id="4"]
-[ext_resource path="res://scripts/ability_hud.gd" type="Script" id="5"]
-[ext_resource path="res://scripts/player_health_bar.gd" type="Script" id="6"]
+[ext_resource type="Script" uid="uid://c0y3bw5j4m2xc" path="res://scripts/main.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/Enemy.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/Bullet.tscn" id="4"]
+[ext_resource type="Script" uid="uid://blcpeuaahn30p" path="res://scripts/ability_hud.gd" id="5"]
+[ext_resource type="Script" uid="uid://j8tqmbic85hw" path="res://scripts/player_health_bar.gd" id="6"]
 
 [sub_resource type="Environment" id="1"]
 background_mode = 1
 background_color = Color(0.05, 0.05, 0.07, 1)
 ambient_light_color = Color(0.4, 0.4, 0.5, 1)
 ambient_light_energy = 1.5
+
+[sub_resource type="BoxShape3D" id="4"]
+size = Vector3(80, 1, 80)
 
 [sub_resource type="StandardMaterial3D" id="2"]
 albedo_color = Color(0.25, 0.35, 0.25, 1)
@@ -21,17 +24,14 @@ roughness = 0.9
 material = SubResource("2")
 size = Vector3(80, 1, 80)
 
-[sub_resource type="BoxShape3D" id="4"]
-size = Vector3(80, 1, 80)
+[sub_resource type="BoxShape3D" id="7"]
+size = Vector3(3, 4, 3)
 
 [sub_resource type="StandardMaterial3D" id="5"]
 albedo_color = Color(0.35, 0.3, 0.25, 1)
 
 [sub_resource type="BoxMesh" id="6"]
 material = SubResource("5")
-size = Vector3(3, 4, 3)
-
-[sub_resource type="BoxShape3D" id="7"]
 size = Vector3(3, 4, 3)
 
 [node name="World" type="Node3D"]
@@ -43,34 +43,31 @@ bullet_scene = ExtResource("4")
 environment = SubResource("1")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-rotation = Vector3(-0.75, 0.6, 0)
+transform = Transform3D(0.8253356, -0.3848822, 0.41314262, 0, 0.73168886, 0.6816388, -0.5646425, -0.56258076, 0.60388887, 0, 0, 0)
 light_energy = 1.2
 shadow_enabled = true
 
 [node name="Ground" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("4")
-position = Vector3(0, -0.5, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 mesh = SubResource("3")
-position = Vector3(0, -0.5, 0)
 
 [node name="Player" parent="." instance=ExtResource("2")]
 unique_name_in_owner = true
-position = Vector3(0, 0, 0)
 
 [node name="EnemySpawnTimer" type="Timer" parent="."]
 unique_name_in_owner = true
 wait_time = 2.5
-autostart = false
-one_shot = false
 
 [node name="GrappleTargets" type="Node3D" parent="."]
 
 [node name="GrappleBox1" type="StaticBody3D" parent="GrappleTargets" groups=["grapple_target"]]
-position = Vector3(12, 2, 18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2, 18)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GrappleTargets/GrappleBox1"]
 shape = SubResource("7")
@@ -79,7 +76,7 @@ shape = SubResource("7")
 mesh = SubResource("6")
 
 [node name="GrappleBox2" type="StaticBody3D" parent="GrappleTargets" groups=["grapple_target"]]
-position = Vector3(-20, 2, -12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 2, -12)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GrappleTargets/GrappleBox2"]
 shape = SubResource("7")
@@ -88,7 +85,7 @@ shape = SubResource("7")
 mesh = SubResource("6")
 
 [node name="GrappleBox3" type="StaticBody3D" parent="GrappleTargets" groups=["grapple_target"]]
-position = Vector3(22, 2, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 2, -4)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GrappleTargets/GrappleBox3"]
 shape = SubResource("7")
@@ -96,17 +93,34 @@ shape = SubResource("7")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="GrappleTargets/GrappleBox3"]
 mesh = SubResource("6")
 
+[node name="GrappleBox4" type="StaticBody3D" parent="GrappleTargets" groups=["grapple_target"]]
+transform = Transform3D(20, 0, 0, 0, 1, 0, 0, 0, 0.5, 3.864296, 0.2198925, -21.477676)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GrappleTargets/GrappleBox4"]
+shape = SubResource("7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GrappleTargets/GrappleBox4"]
+mesh = SubResource("6")
+skeleton = NodePath("../../GrappleBox4")
+
+[node name="GrappleBox5" type="StaticBody3D" parent="GrappleTargets" groups=["grapple_target"]]
+transform = Transform3D(-8.742278e-07, 0, 0.25, 0, 1, 0, -20, 0, -1.0927847e-08, -25.76017, 0.439785, 5.2765694)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GrappleTargets/GrappleBox5"]
+shape = SubResource("7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GrappleTargets/GrappleBox5"]
+mesh = SubResource("6")
+skeleton = NodePath("../../GrappleBox5")
+
 [node name="AbilityHUD" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5")
 
 [node name="AbilityHUDRoot" type="MarginContainer" parent="AbilityHUD"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
 mouse_filter = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
@@ -114,35 +128,36 @@ theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
 [node name="HUDContent" type="VBoxContainer" parent="AbilityHUD/AbilityHUDRoot"]
+layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
 mouse_filter = 2
 theme_override_constants/separation = 12
 
 [node name="HealthDisplay" type="VBoxContainer" parent="AbilityHUD/AbilityHUDRoot/HUDContent"]
 unique_name_in_owner = true
-script = ExtResource("6")
+layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/separation = 4
+script = ExtResource("6")
 
 [node name="HealthTitleLabel" type="Label" parent="AbilityHUD/AbilityHUDRoot/HUDContent/HealthDisplay"]
+layout_mode = 2
 text = "Health"
-mouse_filter = 2
 
 [node name="HealthProgressBar" type="ProgressBar" parent="AbilityHUD/AbilityHUDRoot/HUDContent/HealthDisplay"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(240, 20)
-mouse_filter = 2
+layout_mode = 2
 size_flags_horizontal = 3
-percent_visible = false
+mouse_filter = 2
 
 [node name="HealthValueLabel" type="Label" parent="AbilityHUD/AbilityHUDRoot/HUDContent/HealthDisplay"]
 unique_name_in_owner = true
-mouse_filter = 2
+layout_mode = 2
 horizontal_alignment = 1
 
 [node name="AbilityIndicatorContainer" type="VBoxContainer" parent="AbilityHUD/AbilityHUDRoot/HUDContent"]
 unique_name_in_owner = true
+layout_mode = 2
 mouse_filter = 2
-separation = 14

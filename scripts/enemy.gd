@@ -11,6 +11,7 @@ signal died(enemy: Node)
 @export_range(0.0, 1.57) var knockback_tilt_angle: float = deg_to_rad(75.0)
 @export var contact_damage: float = 10.0
 @export var contact_damage_cooldown: float = 0.75
+@export var knockdown_extra_stun_time: float = 2.0
 
 var health: float = 20.0
 var target: Node3D
@@ -77,7 +78,7 @@ func apply_knockback(direction: Vector3, force: float, stun_time: float) -> void
 		dir = Vector3.FORWARD
 	dir = dir.normalized()
 	_knockback_velocity = dir * force
-	_stun_timer = max(_stun_timer, stun_time)
+	_stun_timer = max(_stun_timer, stun_time + max(knockdown_extra_stun_time, 0.0))
 	_target_tilt = knockback_tilt_angle
 	_knockback_vertical_timer = 0.2
 	velocity.y = knockback_upward_impulse
